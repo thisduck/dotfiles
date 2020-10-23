@@ -90,15 +90,15 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
 Plug 'tpope/vim-git'
 
-nnoremap <silent> <leader>gs :10split<Bar>0Gstatus<CR>
-nnoremap <silent> <leader>gd :Gvdiff<CR> " always split vertically
-nnoremap <silent> <leader>gc :Gcommit<CR>
-nnoremap <silent> <leader>gb :Gblame<CR>
-nnoremap <silent> <leader>gl :Glog<CR>
-nnoremap <silent> <leader>gp :Gpush<CR>
-nnoremap <silent> <leader>gw :Gwrite<CR> " adds the current file
-nnoremap <silent> <leader>ga :Gwrite<CR> " to make it feel like git add
-nnoremap <silent> <leader>grm :Gdelete!<CR>
+nnoremap <silent> <Leader>gs :10split<Bar>0Gstatus<CR>
+nnoremap <silent> <Leader>gd :Gvdiff<CR> " always split vertically
+nnoremap <silent> <Leader>gc :Gcommit<CR>
+nnoremap <silent> <Leader>gb :Gblame<CR>
+nnoremap <silent> <Leader>gl :Glog<CR>
+nnoremap <silent> <Leader>gp :Gpush<CR>
+nnoremap <silent> <Leader>gw :Gwrite<CR> " adds the current file
+nnoremap <silent> <Leader>ga :Gwrite<CR> " to make it feel like git add
+nnoremap <silent> <Leader>grm :Gdelete!<CR>
 
 nnoremap <silent> <Leader>dg :diffget<CR>
 nnoremap <silent> <Leader>dp :diffput<CR>
@@ -109,7 +109,56 @@ call plug#end()
 "
 set number
 set cursorline
+set signcolumn=yes
+
+" Display tabs and trailing spaces visually
+set list listchars=tab:▸\ ,trail:·
 
 set termguicolors
 colorscheme base16-tomorrow-night-eighties
 highlight LineNr guifg=grey guibg=#2d2d2d
+highlight SignColumn guifg=grey guibg=#2d2d2d
+
+" windows/buffers.
+"
+set splitbelow
+set splitright
+set hidden
+
+" indenting.
+"
+set autoindent
+set smartindent
+set smarttab
+set shiftwidth=2
+set softtabstop=2
+set tabstop=2
+set expandtab
+
+" terminal.
+"
+tnoremap jk <C-\><C-n>
+highlight TermCursorNC ctermbg=238  guibg=#888888
+
+" persistent undo.
+"
+silent !mkdir ~/.vim_undo > /dev/null 2>&1
+set undodir=~/.vim_undo
+set undofile
+
+" misc settings.
+"
+set timeoutlen=300
+set ttimeoutlen=300
+set updatetime=250
+
+" prefer vertical orientation when using :diffsplit
+set diffopt+=vertical
+
+" We don't want those `.swp` files while we're editing.
+set noswapfile
+set nobackup
+set nowb
+
+" Toggle setpaste
+nnoremap <Leader>p :set invpaste<CR>:set paste?<CR>
