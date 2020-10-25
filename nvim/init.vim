@@ -9,11 +9,15 @@ call plug#begin('~/.config/nvim/plugged')
 Plug 'chriskempson/base16-vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-let g:airline_powerline_fonts = 1 
+let g:airline_powerline_fonts = 1
 
 " IDE.
 "
 Plug 'mhinz/vim-startify'
+let g:startify_change_to_vcs_root = 1
+
+
+Plug 'airblade/vim-rooter'
 Plug 'tomtom/tcomment_vim'
 
 " motion.
@@ -44,7 +48,7 @@ nmap y <plug>(YoinkYankPreserveCursorPosition)
 xmap y <plug>(YoinkYankPreserveCursorPosition)
 
 Plug 'svermeulen/vim-subversive'
-nmap s <nmap>(SubversiveSubstitute)
+nmap s <plug>(SubversiveSubstitute)
 nmap ss <plug>(SubversiveSubstituteLine)
 nmap S <plug>(SubversiveSubstituteToEndOfLine)
 xmap s <plug>(SubversiveSubstitute)
@@ -63,10 +67,10 @@ Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-entire'
 Plug 'kana/vim-textobj-fold'
 Plug 'kana/vim-textobj-function'
-Plug 'kana/vim-textobj-indent'
 Plug 'kana/vim-textobj-lastpat'
+Plug 'michaeljsmith/vim-indent-object'
 Plug 'beloglazov/vim-textobj-quotes'
-Plug 'idbrii/textobj-word-column.vim'
+Plug 'coderifous/textobj-word-column.vim'
 
 Plug 'tpope/vim-surround'
 
@@ -103,6 +107,137 @@ nnoremap <silent> <Leader>grm :Gdelete!<CR>
 nnoremap <silent> <Leader>dg :diffget<CR>
 nnoremap <silent> <Leader>dp :diffput<CR>
 
+" search.
+"
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+
+let g:fzf_command_prefix = 'Fzf'
+let g:fzf_layout = { 'down': '40%' }
+
+" An action can be a reference to a function that processes selected lines
+function! s:build_quickfix_list(lines)
+  call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
+  copen
+  cc
+endfunction
+
+let g:fzf_action = {
+  \ 'ctrl-q': function('s:build_quickfix_list'),
+  \ 'ctrl-t': 'tab split',
+  \ 'ctrl-x': 'split',
+  \ 'ctrl-v': 'vsplit' }
+
+nmap <leader><tab> <plug>(fzf-maps-n)
+nnoremap <Leader>/ :FzfRg<Space>
+nnoremap <C-p> :FzfFiles<CR>
+nnoremap <Leader>bs :FzfBuffers<CR>
+nnoremap <Leader>he :FzfHelptags<CR>
+nnoremap <silent>K :FzfRg \b<C-r><C-w>\b<CR>
+
+let g:fzf_colors =
+\ { 'fg':      ['fg', 'Normal'],
+  \ 'bg':      ['bg', 'Normal'],
+  \ 'hl':      ['fg', 'Comment'],
+  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+  \ 'hl+':     ['fg', 'Statement'],
+  \ 'info':    ['fg', 'PreProc'],
+  \ 'border':  ['fg', 'Ignore'],
+  \ 'prompt':  ['fg', 'Conditional'],
+  \ 'pointer': ['fg', 'Exception'],
+  \ 'marker':  ['fg', 'Keyword'],
+  \ 'spinner': ['fg', 'Label'],
+  \ 'header':  ['fg', 'Comment'] }
+
+" language/framework support.
+"
+Plug 'kevinoid/vim-jsonc'
+Plug 'jparise/vim-graphql'
+Plug 'sheerun/vim-polyglot'
+Plug 'jiangmiao/auto-pairs'
+Plug 'dustinfarris/vim-htmlbars-inline-syntax'
+Plug 'joukevandermaas/vim-ember-hbs'
+
+" language server.
+"
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+inoremap <silent><expr> <C-n> coc#refresh()
+
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? coc#_select_confirm() :
+      \ coc#expandableOrJumpable() ?
+      \ "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+let g:coc_snippet_next = '<tab>'
+
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+xmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format)
+
+nmap <leader>rn <Plug>(coc-rename)
+
+xmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>a  <Plug>(coc-codeaction-selected)
+
+nmap <leader>ac  <Plug>(coc-codeaction)
+nmap <leader>qf  <Plug>(coc-fix-current)
+
+nnoremap <silent> L :call <SID>show_documentation()<CR>
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
+  else
+    execute '!' . &keywordprg . " " . expand('<cword>')
+  endif
+endfunction
+
+let g:coc_global_extensions = [
+\ 'coc-json',
+\ 'coc-tsserver',
+\ 'coc-angular',
+\ 'coc-css',
+\ 'coc-ember',
+\ 'coc-emmet',
+\ 'coc-fzf-preview',
+\ 'coc-git',
+\ 'coc-gist',
+\ 'coc-highlight',
+\ 'coc-html',
+\ 'coc-java',
+\ 'coc-snippets',
+\ 'coc-solargraph',
+\ 'coc-sql',
+\ 'coc-svelte',
+\ 'coc-svg',
+\ 'coc-tailwindcss',
+\ 'coc-vetur',
+\ 'coc-prettier',
+\ 'coc-eslint',
+\ ]
+
+" snippets.
+" Plug 'SirVer/ultisnips'
+" let g:UltiSnipsExpandTrigger='<S-Tab>'
+Plug 'honza/vim-snippets'
+
 call plug#end()
 
 " visual.
@@ -110,6 +245,10 @@ call plug#end()
 set number
 set cursorline
 set signcolumn=yes
+
+" mouse.
+"
+set mouse=a
 
 " Display tabs and trailing spaces visually
 set list listchars=tab:▸\ ,trail:·
@@ -139,6 +278,7 @@ set expandtab
 "
 tnoremap jk <C-\><C-n>
 highlight TermCursorNC ctermbg=238  guibg=#888888
+autocmd TermOpen * setlocal nonumber
 
 " persistent undo.
 "
@@ -162,3 +302,6 @@ set nowb
 
 " Toggle setpaste
 nnoremap <Leader>p :set invpaste<CR>:set paste?<CR>
+
+" Return to the last file location.
+au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif

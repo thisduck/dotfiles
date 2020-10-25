@@ -1,0 +1,5 @@
+{
+  "suggest.minTriggerInputLength": 5,
+  "coc.source.buffer.enable": true,
+  "vetur.validation.template": false
+}
