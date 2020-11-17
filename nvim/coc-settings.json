@@ -1,5 +1,13 @@
 {
   "suggest.minTriggerInputLength": 5,
   "coc.source.buffer.enable": true,
-  "vetur.validation.template": false
+  "coc.source.around.enable": true,
+  "eslint.filetypes": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "vue"
+  ],
+  "tailwindCSS.headwind.runOnSave": false
 }

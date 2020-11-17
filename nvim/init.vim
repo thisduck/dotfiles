@@ -15,7 +15,16 @@ let g:airline_powerline_fonts = 1
 "
 Plug 'mhinz/vim-startify'
 let g:startify_change_to_vcs_root = 1
+let g:startify_lists = [
+      \ { 'type': 'dir',       'header': ['   MRU '. getcwd()] },
+      \ { 'type': 'files',     'header': ['   MRU']            },
+      \ { 'type': 'sessions',  'header': ['   Sessions']       },
+      \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
+      \ { 'type': 'commands',  'header': ['   Commands']       },
+      \ ]
 
+Plug 'simnalamburt/vim-mundo'
+nnoremap <Leader>u :MundoToggle<CR>
 
 Plug 'airblade/vim-rooter'
 Plug 'tomtom/tcomment_vim'
@@ -68,6 +77,7 @@ Plug 'kana/vim-textobj-entire'
 Plug 'kana/vim-textobj-fold'
 Plug 'kana/vim-textobj-function'
 Plug 'kana/vim-textobj-lastpat'
+Plug 'kana/vim-textobj-line'
 Plug 'michaeljsmith/vim-indent-object'
 Plug 'beloglazov/vim-textobj-quotes'
 Plug 'coderifous/textobj-word-column.vim'
@@ -109,6 +119,8 @@ nnoremap <silent> <Leader>dp :diffput<CR>
 
 " search.
 "
+Plug 'haya14busa/is.vim'
+
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
@@ -158,6 +170,9 @@ Plug 'sheerun/vim-polyglot'
 Plug 'jiangmiao/auto-pairs'
 Plug 'dustinfarris/vim-htmlbars-inline-syntax'
 Plug 'joukevandermaas/vim-ember-hbs'
+Plug 'pantharshit00/vim-prisma'
+Plug 'posva/vim-vue'
+
 
 " language server.
 "
@@ -183,6 +198,7 @@ nmap <silent> [g <Plug>(coc-diagnostic-prev)
 nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
 nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gf <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
@@ -250,6 +266,12 @@ set signcolumn=yes
 "
 set mouse=a
 
+" search.
+"
+set ignorecase
+set smartcase
+nnoremap // :nohlsearch<CR>
+
 " Display tabs and trailing spaces visually
 set list listchars=tab:▸\ ,trail:·
 
@@ -263,6 +285,7 @@ highlight SignColumn guifg=grey guibg=#2d2d2d
 set splitbelow
 set splitright
 set hidden
+set noequalalways
 
 " indenting.
 "
@@ -279,6 +302,29 @@ set expandtab
 tnoremap jk <C-\><C-n>
 highlight TermCursorNC ctermbg=238  guibg=#888888
 autocmd TermOpen * setlocal nonumber
+
+let g:term_buf = 0
+let g:term_win = 0
+
+function! Term_toggle(height)
+    if win_gotoid(g:term_win)
+        hide
+    else
+        botright new
+        exec "resize " . a:height
+        try
+            exec "buffer " . g:term_buf
+        catch
+            call termopen($SHELL, {"detach": 0})
+            let g:term_buf = bufnr("")
+        endtry
+        startinsert!
+        let g:term_win = win_getid()
+    endif
+endfunction
+
+nnoremap <M-t> :call Term_toggle(10)<cr>
+tnoremap <M-t> <C-\><C-n>:call Term_toggle(10)<cr>
 
 " persistent undo.
 "
@@ -305,3 +351,6 @@ nnoremap <Leader>p :set invpaste<CR>:set paste?<CR>
 
 " Return to the last file location.
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+
+
+let NERDTreeShowHidden=1
