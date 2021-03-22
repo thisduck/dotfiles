@@ -9,5 +9,14 @@
     "typescriptreact",
     "vue"
   ],
-  "tailwindCSS.headwind.runOnSave": false
+  "tailwindCSS.headwind.runOnSave": false,
+  "vetur.format.enable": true,
+  "vetur.validation.style": true,
+  "vetur.validation.script": true,
+  "vetur.validation.template": false,
+  "vetur.validation.templateProps": true,
+  "vetur.format.defaultFormatter.ts": "prettier",
+  "vetur.format.defaultFormatter.js": "prettier",
+  "vetur.format.defaultFormatter.html": "prettier",
+  "prettier.eslintIntegration": true
 }

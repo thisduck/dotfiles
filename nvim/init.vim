@@ -87,6 +87,7 @@ Plug 'tpope/vim-surround'
 " improvements.
 "
 Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-unimpaired'
 
 " search and navigation.
 "
@@ -261,6 +262,7 @@ call plug#end()
 set number
 set cursorline
 set signcolumn=yes
+set cmdheight=2
 
 " mouse.
 "
@@ -271,6 +273,8 @@ set mouse=a
 set ignorecase
 set smartcase
 nnoremap // :nohlsearch<CR>
+
+set inccommand=nosplit
 
 " Display tabs and trailing spaces visually
 set list listchars=tab:▸\ ,trail:·
