@@ -40,6 +40,7 @@ map ; <Plug>(easymotion-bd-f)
 map <Leader>j <Plug>(easymotion-j)
 map <Leader>k <Plug>(easymotion-k)
 map <Leader>w <Plug>(easymotion-w)
+map <Leader><Leader>w <Plug>(easymotion-bd-w)
 map <Leader>b <Plug>(easymotion-b)
 map <Leader>e <Plug>(easymotion-bd-e)
 
