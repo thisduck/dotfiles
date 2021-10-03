@@ -256,6 +256,8 @@ let g:coc_global_extensions = [
 " let g:UltiSnipsExpandTrigger='<S-Tab>'
 Plug 'honza/vim-snippets'
 
+Plug 'diepm/vim-rest-console'
+
 call plug#end()
 
 " visual.
