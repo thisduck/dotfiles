@@ -4,15 +4,19 @@ let localmapleader = ' '
 " plugins.
 "
 call plug#begin('~/.config/nvim/plugged')
+" Plug 'mg979/vim-visual-multi', {'branch': 'master'}
+
 " visual.
 "
 Plug 'chriskempson/base16-vim'
+Plug 'Th3Whit3Wolf/one-nvim'
+
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 let g:airline_powerline_fonts = 1
-
-" IDE.
-"
+ 
+" IDE. 
+" 
 Plug 'mhinz/vim-startify'
 let g:startify_change_to_vcs_root = 1
 let g:startify_lists = [
@@ -82,6 +86,7 @@ Plug 'kana/vim-textobj-line'
 Plug 'michaeljsmith/vim-indent-object'
 Plug 'beloglazov/vim-textobj-quotes'
 Plug 'coderifous/textobj-word-column.vim'
+Plug 'Julian/vim-textobj-variable-segment'
 
 Plug 'tpope/vim-surround'
 
@@ -106,7 +111,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
 Plug 'tpope/vim-git'
 
-nnoremap <silent> <Leader>gs :10split<Bar>0Gstatus<CR>
+nnoremap <silent> <Leader>gs :10split<Bar>0Git<CR>
 nnoremap <silent> <Leader>gd :Gvdiff<CR> " always split vertically
 nnoremap <silent> <Leader>gc :Gcommit<CR>
 nnoremap <silent> <Leader>gb :Gblame<CR>
@@ -122,6 +127,13 @@ nnoremap <silent> <Leader>dp :diffput<CR>
 " search.
 "
 Plug 'haya14busa/is.vim'
+
+Plug 'nvim-lua/popup.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-telescope/telescope-fzy-native.nvim'
+
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
 
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
@@ -142,12 +154,21 @@ let g:fzf_action = {
   \ 'ctrl-x': 'split',
   \ 'ctrl-v': 'vsplit' }
 
-nmap <leader><tab> <plug>(fzf-maps-n)
-nnoremap <Leader>/ :FzfRg<Space>
-nnoremap <C-p> :FzfFiles<CR>
-nnoremap <Leader>bs :FzfBuffers<CR>
-nnoremap <Leader>he :FzfHelptags<CR>
-nnoremap <silent>K :FzfRg \b<C-r><C-w>\b<CR>
+" nnoremap <Leader>/ :FzfRg<Space>
+" nmap <leader><tab> <plug>(fzf-maps-n)
+" nnoremap <C-p> :FzfFiles<CR>
+" nnoremap <C-p> <cmd>Telescope find_files<cr>
+" nnoremap <Leader>bs :FzfBuffers<CR>
+" nnoremap <Leader>he :FzfHelptags<CR>
+" nnoremap <silent>K :FzfRg \b<C-r><C-w>\b<CR>
+
+nnoremap <Leader>/ :lua require('telescope.builtin').grep_string({ search = vim.fn.input("> ")})<CR>
+nnoremap <Leader><tab> <cmd>lua require('telescope.builtin').keymaps()<cr>
+nnoremap <C-p> <cmd>lua require('telescope.builtin').find_files(require('telescope.themes').get_ivy({}))<cr>
+nnoremap <Leader>bs :lua require('telescope.builtin').buffers()<CR>
+nnoremap <Leader>he :lua require('telescope.builtin').help_tags()<CR>
+
+nnoremap <silent>K <cmd>lua require('telescope.builtin').grep_string()<cr>
 
 let g:fzf_colors =
 \ { 'fg':      ['fg', 'Normal'],
@@ -195,6 +216,7 @@ function! s:check_back_space() abort
 endfunction
 
 let g:coc_snippet_next = '<tab>'
+let g:coc_disable_transparent_cursor = 1
 
 nmap <silent> [g <Plug>(coc-diagnostic-prev)
 nmap <silent> ]g <Plug>(coc-diagnostic-next)
@@ -246,10 +268,10 @@ let g:coc_global_extensions = [
 \ 'coc-svelte',
 \ 'coc-svg',
 \ 'coc-tailwindcss',
-\ 'coc-vetur',
 \ 'coc-prettier',
 \ 'coc-eslint',
 \ ]
+Plug 'yaegassy/coc-volar', {'do': 'yarn install --frozen-lockfile'}
 
 " snippets.
 " Plug 'SirVer/ultisnips'
@@ -283,7 +305,8 @@ set inccommand=nosplit
 set list listchars=tab:▸\ ,trail:·
 
 set termguicolors
-colorscheme base16-tomorrow-night-eighties
+" colorscheme base16-tomorrow-night-eighties
+colorscheme one-nvim
 highlight LineNr guifg=grey guibg=#2d2d2d
 highlight SignColumn guifg=grey guibg=#2d2d2d
 
@@ -361,3 +384,4 @@ au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g
 
 
 let NERDTreeShowHidden=1
+lua require('dotfiles.telescope')
