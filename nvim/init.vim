@@ -280,6 +280,10 @@ Plug 'honza/vim-snippets'
 
 Plug 'diepm/vim-rest-console'
 
+" focus
+Plug 'chrisbra/nrrwrgn'
+Plug 'troydm/zoomwintab.vim'
+
 call plug#end()
 
 " visual.
@@ -385,3 +389,6 @@ au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g
 
 let NERDTreeShowHidden=1
 lua require('dotfiles.telescope')
+
+" Setup for root dir
+let g:rooter_patterns = ['.git', 'Makefile', '*.sln', 'build/env.sh']
