@@ -114,7 +114,7 @@ Plug 'tpope/vim-git'
 nnoremap <silent> <Leader>gs :10split<Bar>0Git<CR>
 nnoremap <silent> <Leader>gd :Gvdiff<CR> " always split vertically
 nnoremap <silent> <Leader>gc :Gcommit<CR>
-nnoremap <silent> <Leader>gb :Gblame<CR>
+nnoremap <silent> <Leader>gb :Git blame<CR>
 nnoremap <silent> <Leader>gl :Glog<CR>
 nnoremap <silent> <Leader>gp :Gpush<CR>
 nnoremap <silent> <Leader>gw :Gwrite<CR> " adds the current file
