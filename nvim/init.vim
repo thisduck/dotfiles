@@ -87,6 +87,7 @@ Plug 'michaeljsmith/vim-indent-object'
 Plug 'beloglazov/vim-textobj-quotes'
 Plug 'coderifous/textobj-word-column.vim'
 Plug 'Julian/vim-textobj-variable-segment'
+Plug 'haya14busa/vim-textobj-function-syntax'
 
 Plug 'tpope/vim-surround'
 
