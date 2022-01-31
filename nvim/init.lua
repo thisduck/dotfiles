@@ -65,7 +65,7 @@ vim.cmd [[
   augroup end
 ]]
 
-return require('packer').startup(function()
+require('packer').startup(function()
   -- Packer can manage itself
   use 'wbthomason/packer.nvim'
   use 'nvim-lua/popup.nvim'
@@ -80,13 +80,15 @@ return require('packer').startup(function()
     'nvim-lualine/lualine.nvim',
     requires = { 'kyazdani42/nvim-web-devicons', opt = true },
     config = function()
+      local gps = require("nvim-gps")
       require('lualine').setup {
         options = {
           theme = 'tokyonight'
         },
         sections = {
-          lualine_c = {'filename', "lsp_progress"},
-        }
+          lualine_c = {'filename', "lsp_progress", { gps.get_location, cond = gps.is_available } }
+        },
+        extensions = {'quickfix', 'nerdtree', 'fugitive', 'symbols-outline' }
       }
     end
   }
@@ -100,7 +102,7 @@ return require('packer').startup(function()
         sessions_dir = Path:new(vim.fn.stdpath('data'), 'sessions'),
         path_replacer = '__',
         colon_replacer = '++',
-        autoload_mode = require('session_manager.config').AutoloadMode.LastSession,
+        autoload_mode = require('session_manager.config').AutoloadMode.CurrentDir,
         autosave_last_session = true,
         autosave_ignore_not_normal = true,
         autosave_ignore_filetypes = { 'gitcommit' },
@@ -127,7 +129,6 @@ return require('packer').startup(function()
   -- motion.
   use {
     'phaazon/hop.nvim',
-    branch = 'v1',
     config = function()
       require'hop'.setup {}
 
@@ -135,7 +136,7 @@ return require('packer').startup(function()
       vim.cmd [[map <Leader>w <cmd>HopWord<CR>]]
       vim.cmd [[map <Leader>j <cmd>HopLineStartAC<CR>]]
       vim.cmd [[map <Leader>k <cmd>HopLineStartBC<CR>]]
-      -- vim.cmd [[highlight HopNextKey2 guifg=grey guibg=#2d2d2d]]
+      vim.cmd [[highlight HopNextKey2 guifg=grey guibg=#2d2d2d]]
     end
   }
 
@@ -220,7 +221,42 @@ return require('packer').startup(function()
 
   -- git.
 
-  use 'airblade/vim-gitgutter'
+  use {
+    'lewis6991/gitsigns.nvim',
+    config = function()
+      require('gitsigns').setup {
+        on_attach = function(bufnr)
+          local gs = package.loaded.gitsigns
+
+          local function map(mode, l, r, opts)
+            opts = opts or {}
+            opts.buffer = bufnr
+            vim.keymap.set(mode, l, r, opts)
+          end
+
+          -- Navigation
+          map('n', ']c', "&diff ? ']c' : '<cmd>Gitsigns next_hunk<CR>'", {expr=true})
+          map('n', '[c', "&diff ? '[c' : '<cmd>Gitsigns prev_hunk<CR>'", {expr=true})
+
+          -- Actions
+          map({'n', 'v'}, '<leader>hs', gs.stage_hunk)
+          map({'n', 'v'}, '<leader>hr', gs.reset_hunk)
+          map('n', '<leader>hS', gs.stage_buffer)
+          map('n', '<leader>hu', gs.undo_stage_hunk)
+          map('n', '<leader>hR', gs.reset_buffer)
+          map('n', '<leader>hp', gs.preview_hunk)
+          map('n', '<leader>hb', function() gs.blame_line{full=true} end)
+          map('n', '<leader>tb', gs.toggle_current_line_blame)
+          map('n', '<leader>hd', gs.diffthis)
+          map('n', '<leader>hD', function() gs.diffthis('~') end)
+          map('n', '<leader>td', gs.toggle_deleted)
+
+          -- Text object
+          map({'o', 'x'}, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
+        end
+      }
+    end
+  }
   use 'Xuyuanp/nerdtree-git-plugin'
 
   use 'tpope/vim-rhubarb'
@@ -282,6 +318,20 @@ return require('packer').startup(function()
     end
   }
   use 'tamago324/nlsp-settings.nvim'
-
+  use 'liuchengxu/vista.vim'
+  use {
+    "folke/trouble.nvim",
+    requires = "kyazdani42/nvim-web-devicons",
+    config = function()
+      require("trouble").setup {}
+    end
+  }
+  use {
+    'SmiteshP/nvim-gps',
+    config = function()
+      require("nvim-gps").setup()
+    end
+  }
+  use { "ray-x/lsp_signature.nvim", config = function() require "lsp_signature".setup({}) end}
+  use { 'tami5/lspsaga.nvim' }
 end)
-
