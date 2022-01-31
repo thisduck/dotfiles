@@ -75,6 +75,7 @@ return require('packer').startup(function()
 
   -- visuals.
   use {'folke/tokyonight.nvim', config = function() vim.cmd "colorscheme tokyonight" end}
+  use 'arkav/lualine-lsp-progress'
   use {
     'nvim-lualine/lualine.nvim',
     requires = { 'kyazdani42/nvim-web-devicons', opt = true },
@@ -82,6 +83,9 @@ return require('packer').startup(function()
       require('lualine').setup {
         options = {
           theme = 'tokyonight'
+        },
+        sections = {
+          lualine_c = {'filename', "lsp_progress"},
         }
       }
     end
@@ -99,7 +103,7 @@ return require('packer').startup(function()
         autoload_mode = require('session_manager.config').AutoloadMode.LastSession,
         autosave_last_session = true,
         autosave_ignore_not_normal = true,
-        autosave_ignore_filetypes = { 'gitcommit' }, 
+        autosave_ignore_filetypes = { 'gitcommit' },
         autosave_only_in_session = false,
       })
     end
@@ -131,7 +135,7 @@ return require('packer').startup(function()
       vim.cmd [[map <Leader>w <cmd>HopWord<CR>]]
       vim.cmd [[map <Leader>j <cmd>HopLineStartAC<CR>]]
       vim.cmd [[map <Leader>k <cmd>HopLineStartBC<CR>]]
-      vim.cmd [[highlight HopNextKey2 guifg=grey guibg=#2d2d2d]]
+      -- vim.cmd [[highlight HopNextKey2 guifg=grey guibg=#2d2d2d]]
     end
   }
 
@@ -156,7 +160,7 @@ return require('packer').startup(function()
     'svermeulen/vim-yoink',
     config = function()
       vim.cmd [[nmap <c-n> <plug>(YoinkPostPasteSwapBack)]]
-      vim.cmd [[nmap <c-p> <plug>(YoinkPostPasteSwapForward)]]
+      -- vim.cmd [[nmap <c-p> <plug>(YoinkPostPasteSwapForward)]]
       vim.cmd [[nmap p <plug>(YoinkPaste_p)]]
       vim.cmd [[nmap P <plug>(YoinkPaste_P)]]
       vim.cmd [[nmap y <plug>(YoinkYankPreserveCursorPosition)]]
@@ -208,8 +212,8 @@ return require('packer').startup(function()
   use {
     'preservim/nerdtree',
     config = function()
-      vim.cmd [[map <Leader>nt :NERDTreeToggle<CR>]]
-      vim.cmd [[map <Leader>nf :NERDTreeFind<CR>]]
+      vim.cmd[[map <Leader>nt :NERDTreeToggle<CR>]]
+      vim.cmd[[map <Leader>nf :NERDTreeFind<CR>]]
       vim.cmd[[let NERDTreeShowHidden=1]]
     end
   }
@@ -248,6 +252,7 @@ return require('packer').startup(function()
       vim.cmd[[nnoremap <Leader>/ :lua require('telescope.builtin').grep_string({ search = vim.fn.input("> ")})<CR>]]
       vim.cmd[[nnoremap <Leader><tab> <cmd>lua require('telescope.builtin').keymaps()<cr>]]
       vim.cmd[[nnoremap <C-p> <cmd>lua require('telescope.builtin').find_files(require('telescope.themes').get_ivy({}))<cr>]]
+      vim.cmd[[nnoremap <C-t> <cmd>lua require('telescope.builtin').find_files(require('telescope.themes').get_ivy({}))<cr>]]
       vim.cmd[[nnoremap <Leader>bs :lua require('telescope.builtin').buffers()<CR>]]
       vim.cmd[[nnoremap <Leader>he :lua require('telescope.builtin').help_tags()<CR>]]
       vim.cmd[[nnoremap <silent>K <cmd>lua require('telescope.builtin').grep_string()<cr>]]
@@ -267,4 +272,16 @@ return require('packer').startup(function()
 
   -- rest controls
   use 'diepm/vim-rest-console'
+
+  -- lsp.
+  use 'neovim/nvim-lspconfig'
+  use {
+    'williamboman/nvim-lsp-installer',
+    config = function()
+      require 'dotfiles.lsp'
+    end
+  }
+  use 'tamago324/nlsp-settings.nvim'
+
 end)
+
