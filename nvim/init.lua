@@ -111,4 +111,18 @@ return require('packer').startup(function()
     end
   }
 
+  -- motion.
+  use {
+    'phaazon/hop.nvim',
+    branch = 'v1',
+    config = function()
+      require'hop'.setup {}
+
+      vim.cmd [[map ; :HopChar1<CR>]]
+      vim.cmd [[map <Leader>w :HopWord<CR>]]
+      vim.cmd [[map <Leader>j :HopLine<CR>]]
+      vim.cmd [[highlight HopNextKey2 guifg=grey guibg=#2d2d2d]]
+    end
+  }
+
 end)
