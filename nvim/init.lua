@@ -1,6 +1,6 @@
 -- leader settings.
-vim.g.mapleader = ' '
-vim.g.localmapleader = ' '
+vim.g.mapleader = " "
+vim.g.localmapleader = " "
 
 -- visual.
 vim.opt.number = true
@@ -8,7 +8,7 @@ vim.opt.cursorline = true
 vim.opt.signcolumn = "yes"
 vim.opt.cmdheight = 2
 vim.opt.termguicolors = true
-vim.cmd[[set list listchars=tab:▸\ ,trail:·]]
+vim.cmd [[set list listchars=tab:▸\ ,trail:·]]
 
 -- mouse.
 vim.opt.mouse = "a"
@@ -65,100 +65,104 @@ vim.cmd [[
   augroup end
 ]]
 
-require('packer').startup(function()
+require("packer").startup(function()
   -- Packer can manage itself
-  use 'wbthomason/packer.nvim'
-  use 'nvim-lua/popup.nvim'
-  use 'nvim-lua/plenary.nvim'
-  use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
-
+  use "wbthomason/packer.nvim"
+  use "nvim-lua/popup.nvim"
+  use "nvim-lua/plenary.nvim"
+  use { "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" }
 
   -- visuals.
-  use {'folke/tokyonight.nvim', config = function() vim.cmd "colorscheme tokyonight" end}
-  use 'arkav/lualine-lsp-progress'
   use {
-    'nvim-lualine/lualine.nvim',
-    requires = { 'kyazdani42/nvim-web-devicons', opt = true },
+    "folke/tokyonight.nvim",
     config = function()
-      local gps = require("nvim-gps")
-      require('lualine').setup {
+      vim.cmd "colorscheme tokyonight"
+    end,
+  }
+  use "arkav/lualine-lsp-progress"
+  use {
+    "nvim-lualine/lualine.nvim",
+    requires = { "kyazdani42/nvim-web-devicons", opt = true },
+    config = function()
+      local gps = require "nvim-gps"
+      require("lualine").setup {
         options = {
-          theme = 'tokyonight'
+          theme = "tokyonight",
         },
         sections = {
-          lualine_c = {'filename', "lsp_progress", { gps.get_location, cond = gps.is_available } }
+          lualine_c = { "filename", "lsp_progress", { gps.get_location, cond = gps.is_available } },
         },
-        extensions = {'quickfix', 'nerdtree', 'fugitive', 'symbols-outline' }
+        extensions = { "quickfix", "nerdtree", "fugitive", "symbols-outline" },
       }
-    end
+    end,
   }
 
   -- project.
   use {
-    'Shatur/neovim-session-manager',
-    config = function ()
-      local Path = require('plenary.path')
-      require('session_manager').setup({
-        sessions_dir = Path:new(vim.fn.stdpath('data'), 'sessions'),
-        path_replacer = '__',
-        colon_replacer = '++',
-        autoload_mode = require('session_manager.config').AutoloadMode.CurrentDir,
+    "Shatur/neovim-session-manager",
+    config = function()
+      local Path = require "plenary.path"
+      require("session_manager").setup {
+        sessions_dir = Path:new(vim.fn.stdpath "data", "sessions"),
+        path_replacer = "__",
+        colon_replacer = "++",
+        autoload_mode = require("session_manager.config").AutoloadMode.CurrentDir,
         autosave_last_session = true,
         autosave_ignore_not_normal = true,
-        autosave_ignore_filetypes = { 'gitcommit' },
+        autosave_ignore_filetypes = { "gitcommit" },
         autosave_only_in_session = false,
-      })
-    end
+      }
+    end,
   }
 
   use {
-    'goolord/alpha-nvim',
-    requires = { 'kyazdani42/nvim-web-devicons' },
-    config = function ()
-      require'alpha'.setup(require'alpha.themes.startify'.config)
-    end
-  }
-
-  use {
-    'airblade/vim-rooter',
+    "goolord/alpha-nvim",
+    requires = { "kyazdani42/nvim-web-devicons" },
     config = function()
-      vim.cmd[[ let g:rooter_patterns = ['.git', 'Makefile', '*.sln', 'build/env.sh'] ]]
-    end
+      require("alpha").setup(require("alpha.themes.startify").config)
+    end,
+  }
+
+  use {
+    "airblade/vim-rooter",
+    config = function()
+      vim.cmd [[ let g:rooter_patterns = ['.git', 'Makefile', '*.sln', 'build/env.sh'] ]]
+    end,
   }
 
   -- motion.
   use {
-    'phaazon/hop.nvim',
+    "phaazon/hop.nvim",
     config = function()
-      require'hop'.setup {}
+      require("hop").setup {}
 
       vim.cmd [[map ; <cmd>HopChar1<CR>]]
       vim.cmd [[map <Leader>w <cmd>HopWord<CR>]]
       vim.cmd [[map <Leader>j <cmd>HopLineStartAC<CR>]]
       vim.cmd [[map <Leader>k <cmd>HopLineStartBC<CR>]]
       vim.cmd [[highlight HopNextKey2 guifg=grey guibg=#2d2d2d]]
-    end
+    end,
   }
 
   -- IDE.
   use {
-    'simnalamburt/vim-mundo',
+    "simnalamburt/vim-mundo",
     config = function()
       vim.cmd [[nnoremap <Leader>u :MundoToggle<CR>]]
-    end
+    end,
   }
-  use 'tomtom/tcomment_vim'
+  use "tomtom/tcomment_vim"
 
   -- Copy/Paste.
   use {
-    'machakann/vim-highlightedyank',
+    "machakann/vim-highlightedyank",
     config = function()
       vim.cmd [[let g:highlightedyank_highlight_duration = 600]]
-    end
+    end,
   }
 
   use {
-    'svermeulen/vim-yoink',
+    "svermeulen/vim-yoink",
     config = function()
       vim.cmd [[nmap <c-n> <plug>(YoinkPostPasteSwapBack)]]
       -- vim.cmd [[nmap <c-p> <plug>(YoinkPostPasteSwapForward)]]
@@ -166,65 +170,65 @@ require('packer').startup(function()
       vim.cmd [[nmap P <plug>(YoinkPaste_P)]]
       vim.cmd [[nmap y <plug>(YoinkYankPreserveCursorPosition)]]
       vim.cmd [[xmap y <plug>(YoinkYankPreserveCursorPosition)]]
-    end
+    end,
   }
 
   use {
-    'svermeulen/vim-subversive',
+    "svermeulen/vim-subversive",
     config = function()
-      vim.cmd[[nmap s <plug>(SubversiveSubstitute)]]
-      vim.cmd[[nmap ss <plug>(SubversiveSubstituteLine)]]
-      vim.cmd[[nmap S <plug>(SubversiveSubstituteToEndOfLine)]]
-      vim.cmd[[xmap s <plug>(SubversiveSubstitute)]]
-      vim.cmd[[xmap p <plug>(SubversiveSubstitute)]]
-      vim.cmd[[xmap P <plug>(SubversiveSubstitute)]]
-      vim.cmd[[nmap <leader>s <plug>(SubversiveSubstituteRange)]]
-      vim.cmd[[xmap <leader>s <plug>(SubversiveSubstituteRange)]]
-      vim.cmd[[nmap <leader>ss <plug>(SubversiveSubstituteWordRange)]]
-      vim.cmd[[nmap <leader>r <plug>(SubversiveSubstituteRangeNoPrompt)]]
-      vim.cmd[[xmap <leader>r <plug>(SubversiveSubstituteRangeNoPrompt)]]
-      vim.cmd[[nmap <leader>rr <plug>(SubversiveSubstituteWordRangeNoPrompt)]]
-    end
+      vim.cmd [[nmap s <plug>(SubversiveSubstitute)]]
+      vim.cmd [[nmap ss <plug>(SubversiveSubstituteLine)]]
+      vim.cmd [[nmap S <plug>(SubversiveSubstituteToEndOfLine)]]
+      vim.cmd [[xmap s <plug>(SubversiveSubstitute)]]
+      vim.cmd [[xmap p <plug>(SubversiveSubstitute)]]
+      vim.cmd [[xmap P <plug>(SubversiveSubstitute)]]
+      vim.cmd [[nmap <leader>s <plug>(SubversiveSubstituteRange)]]
+      vim.cmd [[xmap <leader>s <plug>(SubversiveSubstituteRange)]]
+      vim.cmd [[nmap <leader>ss <plug>(SubversiveSubstituteWordRange)]]
+      vim.cmd [[nmap <leader>r <plug>(SubversiveSubstituteRangeNoPrompt)]]
+      vim.cmd [[xmap <leader>r <plug>(SubversiveSubstituteRangeNoPrompt)]]
+      vim.cmd [[nmap <leader>rr <plug>(SubversiveSubstituteWordRangeNoPrompt)]]
+    end,
   }
 
   -- text objects.
   use {
-    'kana/vim-textobj-user',
-    'kana/vim-textobj-entire',
-    'kana/vim-textobj-fold',
-    'kana/vim-textobj-function',
-    'kana/vim-textobj-lastpat',
-    'kana/vim-textobj-line',
-    'michaeljsmith/vim-indent-object',
-    'beloglazov/vim-textobj-quotes',
-    'coderifous/textobj-word-column.vim',
-    'Julian/vim-textobj-variable-segment',
-    'haya14busa/vim-textobj-function-syntax',
+    "kana/vim-textobj-user",
+    "kana/vim-textobj-entire",
+    "kana/vim-textobj-fold",
+    "kana/vim-textobj-function",
+    "kana/vim-textobj-lastpat",
+    "kana/vim-textobj-line",
+    "michaeljsmith/vim-indent-object",
+    "beloglazov/vim-textobj-quotes",
+    "coderifous/textobj-word-column.vim",
+    "Julian/vim-textobj-variable-segment",
+    "haya14busa/vim-textobj-function-syntax",
   }
 
   -- improvements.
 
-  use 'tpope/vim-surround'
-  use 'tpope/vim-repeat'
-  use 'tpope/vim-unimpaired'
+  use "tpope/vim-surround"
+  use "tpope/vim-repeat"
+  use "tpope/vim-unimpaired"
 
   -- search and navigation.
 
   use {
-    'preservim/nerdtree',
+    "preservim/nerdtree",
     config = function()
-      vim.cmd[[map <Leader>nt :NERDTreeToggle<CR>]]
-      vim.cmd[[map <Leader>nf :NERDTreeFind<CR>]]
-      vim.cmd[[let NERDTreeShowHidden=1]]
-    end
+      vim.cmd [[map <Leader>nt :NERDTreeToggle<CR>]]
+      vim.cmd [[map <Leader>nf :NERDTreeFind<CR>]]
+      vim.cmd [[let NERDTreeShowHidden=1]]
+    end,
   }
 
   -- git.
 
   use {
-    'lewis6991/gitsigns.nvim',
+    "lewis6991/gitsigns.nvim",
     config = function()
-      require('gitsigns').setup {
+      require("gitsigns").setup {
         on_attach = function(bufnr)
           local gs = package.loaded.gitsigns
 
@@ -235,103 +239,154 @@ require('packer').startup(function()
           end
 
           -- Navigation
-          map('n', ']c', "&diff ? ']c' : '<cmd>Gitsigns next_hunk<CR>'", {expr=true})
-          map('n', '[c', "&diff ? '[c' : '<cmd>Gitsigns prev_hunk<CR>'", {expr=true})
+          map("n", "]c", "&diff ? ']c' : '<cmd>Gitsigns next_hunk<CR>'", { expr = true })
+          map("n", "[c", "&diff ? '[c' : '<cmd>Gitsigns prev_hunk<CR>'", { expr = true })
 
           -- Actions
-          map({'n', 'v'}, '<leader>hs', gs.stage_hunk)
-          map({'n', 'v'}, '<leader>hr', gs.reset_hunk)
-          map('n', '<leader>hS', gs.stage_buffer)
-          map('n', '<leader>hu', gs.undo_stage_hunk)
-          map('n', '<leader>hR', gs.reset_buffer)
-          map('n', '<leader>hp', gs.preview_hunk)
-          map('n', '<leader>hb', function() gs.blame_line{full=true} end)
-          map('n', '<leader>tb', gs.toggle_current_line_blame)
-          map('n', '<leader>hd', gs.diffthis)
-          map('n', '<leader>hD', function() gs.diffthis('~') end)
-          map('n', '<leader>td', gs.toggle_deleted)
+          map({ "n", "v" }, "<leader>hs", gs.stage_hunk)
+          map({ "n", "v" }, "<leader>hr", gs.reset_hunk)
+          map("n", "<leader>hS", gs.stage_buffer)
+          map("n", "<leader>hu", gs.undo_stage_hunk)
+          map("n", "<leader>hR", gs.reset_buffer)
+          map("n", "<leader>hp", gs.preview_hunk)
+          map("n", "<leader>hb", function()
+            gs.blame_line { full = true }
+          end)
+          map("n", "<leader>tb", gs.toggle_current_line_blame)
+          map("n", "<leader>hd", gs.diffthis)
+          map("n", "<leader>hD", function()
+            gs.diffthis "~"
+          end)
+          map("n", "<leader>td", gs.toggle_deleted)
 
           -- Text object
-          map({'o', 'x'}, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
-        end
+          map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>")
+        end,
       }
-    end
+    end,
   }
-  use 'Xuyuanp/nerdtree-git-plugin'
+  use "Xuyuanp/nerdtree-git-plugin"
 
-  use 'tpope/vim-rhubarb'
-  use 'tpope/vim-git'
+  use "tpope/vim-rhubarb"
+  use "tpope/vim-git"
   use {
-    'tpope/vim-fugitive',
+    "tpope/vim-fugitive",
     config = function()
-      vim.cmd[[nnoremap <silent> <Leader>gs :10split<Bar>0Git<CR>]]
-      vim.cmd[[nnoremap <silent> <Leader>gd :Gvdiff<CR> " always split vertically]]
-      vim.cmd[[nnoremap <silent> <Leader>gc :Gcommit<CR>]]
-      vim.cmd[[nnoremap <silent> <Leader>gb :Git blame<CR>]]
-      vim.cmd[[nnoremap <silent> <Leader>gl :Glog<CR>]]
-      vim.cmd[[nnoremap <silent> <Leader>gp :Gpush<CR>]]
-      vim.cmd[[nnoremap <silent> <Leader>gw :Gwrite<CR> " adds the current file]]
-      vim.cmd[[nnoremap <silent> <Leader>ga :Gwrite<CR> " to make it feel like git add]]
-      vim.cmd[[nnoremap <silent> <Leader>grm :Gdelete!<CR>]]
+      vim.cmd [[nnoremap <silent> <Leader>gs :10split<Bar>0Git<CR>]]
+      vim.cmd [[nnoremap <silent> <Leader>gd :Gvdiff<CR> " always split vertically]]
+      vim.cmd [[nnoremap <silent> <Leader>gc :Gcommit<CR>]]
+      vim.cmd [[nnoremap <silent> <Leader>gb :Git blame<CR>]]
+      vim.cmd [[nnoremap <silent> <Leader>gl :Glog<CR>]]
+      vim.cmd [[nnoremap <silent> <Leader>gp :Gpush<CR>]]
+      vim.cmd [[nnoremap <silent> <Leader>gw :Gwrite<CR> " adds the current file]]
+      vim.cmd [[nnoremap <silent> <Leader>ga :Gwrite<CR> " to make it feel like git add]]
+      vim.cmd [[nnoremap <silent> <Leader>grm :Gdelete!<CR>]]
 
-      vim.cmd[[nnoremap <silent> <Leader>dg :diffget<CR>]]
-      vim.cmd[[nnoremap <silent> <Leader>dp :diffput<CR>]]
-    end
+      vim.cmd [[nnoremap <silent> <Leader>dg :diffget<CR>]]
+      vim.cmd [[nnoremap <silent> <Leader>dp :diffput<CR>]]
+    end,
   }
 
   -- search.
-  use 'haya14busa/is.vim'
+  use "haya14busa/is.vim"
 
-  use{
-    'nvim-telescope/telescope.nvim',
+  use {
+    "nvim-telescope/telescope.nvim",
     config = function()
-      vim.cmd[[nnoremap <Leader>/ :lua require('telescope.builtin').grep_string({ search = vim.fn.input("> ")})<CR>]]
-      vim.cmd[[nnoremap <Leader><tab> <cmd>lua require('telescope.builtin').keymaps()<cr>]]
-      vim.cmd[[nnoremap <C-p> <cmd>lua require('telescope.builtin').find_files(require('telescope.themes').get_ivy({}))<cr>]]
-      vim.cmd[[nnoremap <C-t> <cmd>lua require('telescope.builtin').find_files(require('telescope.themes').get_ivy({}))<cr>]]
-      vim.cmd[[nnoremap <Leader>bs :lua require('telescope.builtin').buffers()<CR>]]
-      vim.cmd[[nnoremap <Leader>he :lua require('telescope.builtin').help_tags()<CR>]]
-      vim.cmd[[nnoremap <silent>K <cmd>lua require('telescope.builtin').grep_string()<cr>]]
-      require('dotfiles.telescope')
-    end
+      vim.cmd [[nnoremap <Leader>/ :lua require('telescope.builtin').grep_string({ search = vim.fn.input("> ")})<CR>]]
+      vim.cmd [[nnoremap <Leader><tab> <cmd>lua require('telescope.builtin').keymaps()<cr>]]
+      vim.cmd [[nnoremap <C-p> <cmd>lua require('telescope.builtin').find_files(require('telescope.themes').get_ivy({}))<cr>]]
+      vim.cmd [[nnoremap <C-t> <cmd>lua require('telescope.builtin').find_files(require('telescope.themes').get_ivy({}))<cr>]]
+      vim.cmd [[nnoremap <Leader>bs :lua require('telescope.builtin').buffers()<CR>]]
+      vim.cmd [[nnoremap <Leader>he :lua require('telescope.builtin').help_tags()<CR>]]
+      vim.cmd [[nnoremap <silent>K <cmd>lua require('telescope.builtin').grep_string()<cr>]]
+      require "dotfiles.telescope"
+    end,
   }
-  use 'nvim-telescope/telescope-fzy-native.nvim'
+  use "nvim-telescope/telescope-fzy-native.nvim"
 
   -- language/framework support.
-  use 'sheerun/vim-polyglot'
+  use "sheerun/vim-polyglot"
 
   -- focus.
   use {
-    'chrisbra/nrrwrgn',
-    'troydm/zoomwintab.vim'
+    "chrisbra/nrrwrgn",
+    "troydm/zoomwintab.vim",
   }
 
   -- rest controls
-  use 'diepm/vim-rest-console'
+  use "diepm/vim-rest-console"
 
   -- lsp.
-  use 'neovim/nvim-lspconfig'
+  use "neovim/nvim-lspconfig"
   use {
-    'williamboman/nvim-lsp-installer',
+    "williamboman/nvim-lsp-installer",
     config = function()
-      require 'dotfiles.lsp'
-    end
+      require "dotfiles.lsp"
+    end,
   }
-  use 'tamago324/nlsp-settings.nvim'
-  use 'liuchengxu/vista.vim'
+  use "tamago324/nlsp-settings.nvim"
+  use "liuchengxu/vista.vim"
   use {
     "folke/trouble.nvim",
     requires = "kyazdani42/nvim-web-devicons",
     config = function()
       require("trouble").setup {}
-    end
+    end,
   }
   use {
-    'SmiteshP/nvim-gps',
+    "SmiteshP/nvim-gps",
     config = function()
       require("nvim-gps").setup()
-    end
+    end,
   }
-  use { "ray-x/lsp_signature.nvim", config = function() require "lsp_signature".setup({}) end}
-  use { 'tami5/lspsaga.nvim' }
+  use {
+    "ray-x/lsp_signature.nvim",
+    config = function()
+      require("lsp_signature").setup {}
+    end,
+  }
+  use "tami5/lspsaga.nvim"
+  use {
+    "jose-elias-alvarez/null-ls.nvim",
+    config = function()
+      require("null-ls").setup {
+        sources = {
+          require("null-ls").builtins.formatting.stylua,
+          require("null-ls").builtins.formatting.eslint_d,
+          require("null-ls").builtins.formatting.prettier,
+        },
+        on_attach = function(client)
+          if client.resolved_capabilities.document_formatting then
+            vim.cmd [[
+            augroup LspFormatting
+                autocmd! * <buffer>
+                autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync(nil, 4000)
+            augroup END
+            ]]
+          end
+        end,
+      }
+    end,
+  }
+
+  -- completion.
+  use "hrsh7th/vim-vsnip"
+  use "rafamadriz/friendly-snippets"
+
+  -- use 'ms-jpq/coq_nvim'
+  use {
+    "hrsh7th/nvim-cmp",
+    requires = {
+      "hrsh7th/cmp-vsnip",
+      "hrsh7th/cmp-nvim-lsp",
+      "hrsh7th/cmp-buffer",
+      "hrsh7th/cmp-path",
+      "hrsh7th/cmp-cmdline",
+    },
+    config = function()
+      require "dotfiles.cmp"
+    end,
+  }
+  use "rstacruz/vim-closer"
 end)
