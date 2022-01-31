@@ -156,6 +156,16 @@ require("packer").startup(function()
   }
   use "tomtom/tcomment_vim"
 
+  use {
+    "akinsho/toggleterm.nvim",
+    config = function()
+      vim.cmd [[let g:toggleterm_terminal_mapping = '<C-t>']]
+      vim.cmd [[tnoremap <silent>jk <C-\><C-n>]]
+      vim.cmd [[nnoremap <silent><c-t> <Cmd>exe v:count1 . "ToggleTerm"<CR>]]
+      vim.cmd [[inoremap <silent><c-t> <Esc><Cmd>exe v:count1 . "ToggleTerm"<CR>]]
+    end,
+  }
+
   -- Copy/Paste.
   use {
     "machakann/vim-highlightedyank",
@@ -299,7 +309,6 @@ require("packer").startup(function()
       vim.cmd [[nnoremap <Leader>/ :lua require('telescope.builtin').grep_string({ search = vim.fn.input("> ")})<CR>]]
       vim.cmd [[nnoremap <Leader><tab> <cmd>lua require('telescope.builtin').keymaps()<cr>]]
       vim.cmd [[nnoremap <C-p> <cmd>lua require('telescope.builtin').find_files(require('telescope.themes').get_ivy({}))<cr>]]
-      vim.cmd [[nnoremap <C-t> <cmd>lua require('telescope.builtin').find_files(require('telescope.themes').get_ivy({}))<cr>]]
       vim.cmd [[nnoremap <Leader>bs :lua require('telescope.builtin').buffers()<CR>]]
       vim.cmd [[nnoremap <Leader>he :lua require('telescope.builtin').help_tags()<CR>]]
       vim.cmd [[nnoremap <silent>K <cmd>lua require('telescope.builtin').grep_string()<cr>]]
