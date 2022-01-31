@@ -57,13 +57,8 @@ vim.cmd [[autocmd BufRead * autocmd FileType <buffer> ++once if &ft !~# 'commit\
 -- plugins
 vim.cmd [[packadd packer.nvim]]
 
--- Autocommand that reloads neovim whenever you save the plugins.lua file
-vim.cmd [[
-  augroup packer_user_config
-    autocmd!
-    autocmd BufWritePost init.lua source <afile> | PackerSync
-  augroup end
-]]
+-- Shortcut for sourcing and running packer.
+vim.cmd [[nnoremap <Leader>i <cmd>source ~/.config/nvim/init.lua <bar> PackerSync<CR>]]
 
 require("packer").startup(function()
   -- Packer can manage itself
