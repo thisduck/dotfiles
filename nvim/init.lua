@@ -65,7 +65,19 @@ require("packer").startup(function()
   use "wbthomason/packer.nvim"
   use "nvim-lua/popup.nvim"
   use "nvim-lua/plenary.nvim"
-  use { "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" }
+  use {
+    "nvim-treesitter/nvim-treesitter",
+    run = ":TSUpdate",
+    config = function()
+      require("nvim-treesitter.configs").setup {
+        ensure_installed = "maintained",
+        sync_install = false,
+        highlight = {
+          enable = true,
+        },
+      }
+    end,
+  }
 
   -- visuals.
   use {
