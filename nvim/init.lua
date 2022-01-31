@@ -36,14 +36,17 @@ vim.opt.tabstop = 2
 vim.opt.expandtab = true
 
 -- persistent undo.
--- vim.cmd "silent !mkdir ~/.vim_undo > /dev/null 2>&1"
--- vim.opt.undodir = "~/.vim_undo"
--- vim.opt.undofile = true
+vim.cmd "silent !mkdir ~/.vim_undo > /dev/null 2>&1"
+vim.opt.undodir = vim.fn.stdpath "data" .. "/vim_undo"
+vim.opt.undofile = true
 
 -- swp files.
 vim.opt.swapfile = false
 vim.opt.backup = false
 vim.opt.writebackup = false
+
+-- return to the last file location.
+vim.cmd [[autocmd BufRead * autocmd FileType <buffer> ++once if &ft !~# 'commit\|rebase' && line("'\"") > 1 && line("'\"") <= line("$") | exe 'normal! g`"' | endif]]
 
 -- plugins
 vim.cmd [[packadd packer.nvim]]
@@ -59,6 +62,7 @@ vim.cmd [[
 return require('packer').startup(function()
   -- Packer can manage itself
   use 'wbthomason/packer.nvim'
+  use 'nvim-lua/plenary.nvim'
 
   -- visuals.
   use {'folke/tokyonight.nvim', config = function() vim.cmd "colorscheme tokyonight" end}
@@ -73,4 +77,38 @@ return require('packer').startup(function()
       }
     end
   }
+
+  -- project.
+  use {
+    'Shatur/neovim-session-manager',
+    config = function ()
+      local Path = require('plenary.path')
+      require('session_manager').setup({
+        sessions_dir = Path:new(vim.fn.stdpath('data'), 'sessions'),
+        path_replacer = '__',
+        colon_replacer = '++',
+        autoload_mode = require('session_manager.config').AutoloadMode.LastSession,
+        autosave_last_session = true,
+        autosave_ignore_not_normal = true,
+        autosave_ignore_filetypes = { 'gitcommit' }, 
+        autosave_only_in_session = false,
+      })
+    end
+  }
+
+  use {
+    'goolord/alpha-nvim',
+    requires = { 'kyazdani42/nvim-web-devicons' },
+    config = function ()
+      require'alpha'.setup(require'alpha.themes.startify'.config)
+    end
+  }
+
+  use {
+    'airblade/vim-rooter',
+    config = function()
+      vim.cmd[[ let g:rooter_patterns = ['.git', 'Makefile', '*.sln', 'build/env.sh'] ]]
+    end
+  }
+
 end)
