@@ -52,5 +52,17 @@ return require('packer').startup(function()
   -- Packer can manage itself
   use 'wbthomason/packer.nvim'
 
+  -- visuals.
   use {'folke/tokyonight.nvim', config = function() vim.cmd "colorscheme tokyonight" end}
+  use {
+    'nvim-lualine/lualine.nvim',
+    requires = { 'kyazdani42/nvim-web-devicons', opt = true },
+    config = function()
+      require('lualine').setup {
+        options = {
+          theme = 'tokyonight'
+        }
+      }
+    end
+  }
 end)
