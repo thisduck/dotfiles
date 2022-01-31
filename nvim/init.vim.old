@@ -89,10 +89,10 @@ Plug 'coderifous/textobj-word-column.vim'
 Plug 'Julian/vim-textobj-variable-segment'
 Plug 'haya14busa/vim-textobj-function-syntax'
 
-Plug 'tpope/vim-surround'
 
 " improvements.
 "
+Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-unimpaired'
 
@@ -168,7 +168,6 @@ nnoremap <Leader><tab> <cmd>lua require('telescope.builtin').keymaps()<cr>
 nnoremap <C-p> <cmd>lua require('telescope.builtin').find_files(require('telescope.themes').get_ivy({}))<cr>
 nnoremap <Leader>bs :lua require('telescope.builtin').buffers()<CR>
 nnoremap <Leader>he :lua require('telescope.builtin').help_tags()<CR>
-
 nnoremap <silent>K <cmd>lua require('telescope.builtin').grep_string()<cr>
 
 let g:fzf_colors =
