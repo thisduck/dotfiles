@@ -101,7 +101,8 @@ require("packer").startup(function()
         sessions_dir = Path:new(vim.fn.stdpath "data", "sessions"),
         path_replacer = "__",
         colon_replacer = "++",
-        autoload_mode = require("session_manager.config").AutoloadMode.CurrentDir,
+        autoload_mode = require("session_manager.config").AutoloadMode.Disabled,
+        autoload_last_session = false,
         autosave_last_session = true,
         autosave_ignore_not_normal = true,
         autosave_ignore_filetypes = { "gitcommit" },
@@ -111,10 +112,17 @@ require("packer").startup(function()
   }
 
   use {
-    "goolord/alpha-nvim",
-    requires = { "kyazdani42/nvim-web-devicons" },
+    "mhinz/vim-startify",
     config = function()
-      require("alpha").setup(require("alpha.themes.startify").config)
+      vim.cmd [[let g:startify_change_to_vcs_root = 1]]
+      vim.g["startify_session_dir"] = vim.fn.stdpath "data" .. "/sessions"
+      vim.cmd [[let g:startify_lists = [
+      \ { 'type': 'sessions',  'header': ['   Sessions']       },
+      \ { 'type': 'dir',       'header': ['   MRU '. getcwd()] },
+      \ { 'type': 'files',     'header': ['   MRU']            },
+      \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
+      \ { 'type': 'commands',  'header': ['   Commands']       },
+      \ ] ]]
     end,
   }
 
