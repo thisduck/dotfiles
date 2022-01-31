@@ -36,9 +36,9 @@ vim.opt.tabstop = 2
 vim.opt.expandtab = true
 
 -- persistent undo.
-vim.cmd "silent !mkdir ~/.vim_undo > /dev/null 2>&1"
-vim.opt.undodir = "~/.vim_undo"
-vim.opt.undofile = true
+-- vim.cmd "silent !mkdir ~/.vim_undo > /dev/null 2>&1"
+-- vim.opt.undodir = "~/.vim_undo"
+-- vim.opt.undofile = true
 
 -- swp files.
 vim.opt.swapfile = false
@@ -51,4 +51,6 @@ vim.cmd [[packadd packer.nvim]]
 return require('packer').startup(function()
   -- Packer can manage itself
   use 'wbthomason/packer.nvim'
+
+  use {'folke/tokyonight.nvim', config = function() vim.cmd "colorscheme tokyonight" end}
 end)
