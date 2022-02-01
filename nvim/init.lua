@@ -81,11 +81,12 @@ require("packer").startup(function()
 
   -- visuals.
   use {
-    "folke/tokyonight.nvim",
+    "navarasu/onedark.nvim",
     config = function()
-      vim.cmd "colorscheme tokyonight"
+      vim.cmd "colorscheme onedark"
     end,
   }
+
   use "arkav/lualine-lsp-progress"
   use {
     "nvim-lualine/lualine.nvim",
@@ -94,7 +95,7 @@ require("packer").startup(function()
       local gps = require "nvim-gps"
       require("lualine").setup {
         options = {
-          theme = "tokyonight",
+          theme = "onedark",
         },
         sections = {
           lualine_c = { "filename", "lsp_progress", { gps.get_location, cond = gps.is_available } },
@@ -155,7 +156,7 @@ require("packer").startup(function()
       vim.cmd [[map <Leader>w <cmd>HopWord<CR>]]
       vim.cmd [[map <Leader>j <cmd>HopLineStartAC<CR>]]
       vim.cmd [[map <Leader>k <cmd>HopLineStartBC<CR>]]
-      vim.cmd [[highlight HopNextKey2 guifg=grey guibg=#2d2d2d]]
+      vim.cmd [[highlight HopNextKey2 guifg=darkgrey guibg=#2d2d2d]]
     end,
   }
 
