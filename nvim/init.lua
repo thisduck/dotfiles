@@ -167,6 +167,14 @@ require("packer").startup(function()
     end,
   }
   use "tomtom/tcomment_vim"
+  use "rstacruz/vim-closer"
+  use {
+    "andymass/vim-matchup",
+    event = "VimEnter",
+    config = function()
+      vim.cmd [[nnoremap <c-k> <cmd>MatchupWhereAmI?<cr>]]
+    end,
+  }
 
   use {
     "akinsho/toggleterm.nvim",
@@ -350,7 +358,15 @@ require("packer").startup(function()
     end,
   }
   use "tamago324/nlsp-settings.nvim"
-  use "liuchengxu/vista.vim"
+  use {
+    "zeertzjq/symbols-outline.nvim",
+    branch = "patch-1",
+    config = function()
+      vim.g.symbols_outline = {
+        width = 30,
+      }
+    end,
+  }
   use {
     "folke/trouble.nvim",
     requires = "kyazdani42/nvim-web-devicons",
@@ -398,7 +414,6 @@ require("packer").startup(function()
   use "hrsh7th/vim-vsnip"
   use "rafamadriz/friendly-snippets"
 
-  -- use 'ms-jpq/coq_nvim'
   use {
     "hrsh7th/nvim-cmp",
     requires = {
@@ -412,5 +427,4 @@ require("packer").startup(function()
       require "dotfiles.cmp"
     end,
   }
-  use "rstacruz/vim-closer"
 end)

@@ -1,6 +1,9 @@
-local cmp = require('cmp')
+local cmp = require "cmp"
 
 cmp.setup {
+  completion = {
+    keyword_length = 3,
+  },
   snippet = {
     expand = function(args)
       vim.fn["vsnip#anonymous"](args.body)
@@ -8,7 +11,7 @@ cmp.setup {
   },
   mapping = {
     ["<C-k>"] = cmp.mapping.select_prev_item(),
-		["<C-j>"] = cmp.mapping.select_next_item(),
+    ["<C-j>"] = cmp.mapping.select_next_item(),
     ["<C-b>"] = cmp.mapping(cmp.mapping.scroll_docs(-1), { "i", "c" }),
     ["<C-f>"] = cmp.mapping(cmp.mapping.scroll_docs(1), { "i", "c" }),
     ["<C-Space>"] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }),
@@ -17,7 +20,7 @@ cmp.setup {
       i = cmp.mapping.abort(),
       c = cmp.mapping.close(),
     },
-    ["<C-c>"] = function (fallback)
+    ["<C-c>"] = function(fallback)
       fallback()
     end,
     -- Accept currently selected item. If none selected, `select` first item.
@@ -26,7 +29,7 @@ cmp.setup {
   },
   sources = {
     { name = "nvim_lsp" },
-    { name = 'vsnip' },
+    { name = "vsnip" },
     { name = "buffer" },
     { name = "path" },
   },
@@ -40,8 +43,16 @@ cmp.setup {
   },
 }
 
-cmp.setup.cmdline('/', {
+cmp.setup.cmdline("/", {
   sources = {
-    { name = 'buffer' }
-  }
+    { name = "buffer" },
+  },
+})
+
+cmp.setup.cmdline(":", {
+  sources = cmp.config.sources({
+    { name = "path" },
+  }, {
+    { name = "cmdline" },
+  }),
 })

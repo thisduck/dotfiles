@@ -12,7 +12,7 @@ local on_attach = function(client, bufnr)
   -- vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, "n", "gf", "<cmd>lua vim.lsp.buf.definition()<CR>", opts)
   -- vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "<C-k>", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
+  vim.api.nvim_buf_set_keymap(bufnr, "n", "<C-l>", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
   -- -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
   -- -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
   -- -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
@@ -33,15 +33,15 @@ local on_attach = function(client, bufnr)
   map(bufnr, "n", "gd", "<cmd>Lspsaga preview_definition<cr>", { silent = true, noremap = true })
   -- map(bufnr, "n", "<C-u>", "<cmd>lua require('lspsaga.action').smart_scroll_with_saga(-1)<cr>", {})
   -- map(bufnr, "n", "<C-d>", "<cmd>lua require('lspsaga.action').smart_scroll_with_saga(1)<cr>", {})
-  if client.name == "volar" then 
+  if client.name == "volar" then
     client.resolved_capabilities.document_formatting = false
   end
-  if client.name == "tsserver" then 
+  if client.name == "tsserver" then
     client.resolved_capabilities.document_formatting = false
   end
 end
 
-local lsp_installer_servers = require("nvim-lsp-installer.servers")
+local lsp_installer_servers = require "nvim-lsp-installer.servers"
 
 local servers = {
   "ansiblels",
@@ -66,8 +66,7 @@ local servers = {
 }
 
 -- Loop through the servers listed above.
-local enhance_server_opts = {
-}
+local enhance_server_opts = {}
 for _, server_name in pairs(servers) do
   local server_available, server = lsp_installer_servers.get_server(server_name)
   if server_available then
@@ -89,6 +88,6 @@ for _, server_name in pairs(servers) do
     end
   end
 end
-vim.diagnostic.config({
+vim.diagnostic.config {
   virtual_text = false,
-})
+}
