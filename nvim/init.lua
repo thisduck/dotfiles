@@ -323,10 +323,10 @@ require("packer").startup(function()
     config = function()
       vim.cmd [[nnoremap <silent> <Leader>gs :10split<Bar>0Git<CR>]]
       vim.cmd [[nnoremap <silent> <Leader>gd :Gvdiff<CR> " always split vertically]]
-      vim.cmd [[nnoremap <silent> <Leader>gc :Gcommit<CR>]]
+      vim.cmd [[nnoremap <silent> <Leader>gc :Git commit<CR>]]
       vim.cmd [[nnoremap <silent> <Leader>gb :Git blame<CR>]]
-      vim.cmd [[nnoremap <silent> <Leader>gl :Glog<CR>]]
-      vim.cmd [[nnoremap <silent> <Leader>gp :Gpush<CR>]]
+      vim.cmd [[nnoremap <silent> <Leader>gl :Gclog %<CR>]]
+      vim.cmd [[nnoremap <silent> <Leader>gp :Git push<CR>]]
       vim.cmd [[nnoremap <silent> <Leader>gw :Gwrite<CR> " adds the current file]]
       vim.cmd [[nnoremap <silent> <Leader>ga :Gwrite<CR> " to make it feel like git add]]
       vim.cmd [[nnoremap <silent> <Leader>grm :Gdelete!<CR>]]
