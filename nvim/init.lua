@@ -266,6 +266,15 @@ require("packer").startup(function()
   -- git.
 
   use {
+    "sindrets/diffview.nvim",
+    requires = "nvim-lua/plenary.nvim",
+    config = function()
+      vim.cmd [[nnoremap <silent> <Leader>dv :DiffviewOpen<CR>]]
+      vim.cmd [[nnoremap <silent> <Leader>df :DiffviewFileHistory<CR>]]
+    end,
+  }
+
+  use {
     "lewis6991/gitsigns.nvim",
     config = function()
       require("gitsigns").setup {
