@@ -186,6 +186,12 @@ require("packer").startup(function()
       vim.cmd [[inoremap <silent><c-t> <Esc><Cmd>exe v:count1 . "ToggleTerm"<CR>]]
     end,
   }
+  use {
+    "folke/which-key.nvim",
+    config = function()
+      require("which-key").setup {}
+    end,
+  }
 
   -- Copy/Paste.
   use {
