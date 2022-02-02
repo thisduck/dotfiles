@@ -260,6 +260,25 @@ require("packer").startup(function()
     "coderifous/textobj-word-column.vim",
     "Julian/vim-textobj-variable-segment",
     "haya14busa/vim-textobj-function-syntax",
+    {
+      "nvim-treesitter/nvim-treesitter-textobjects",
+      config = function()
+        require("nvim-treesitter.configs").setup {
+          textobjects = {
+            select = {
+              enable = true,
+              lookahead = true,
+              keymaps = {
+                ["af"] = "@function.outer",
+                ["if"] = "@function.inner",
+                ["ac"] = "@class.outer",
+                ["ic"] = "@class.inner",
+              },
+            },
+          },
+        }
+      end,
+    },
   }
 
   -- improvements.
