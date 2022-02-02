@@ -1,3 +1,18 @@
+function dump(o)
+  if type(o) == "table" then
+    local s = "{ "
+    for k, v in pairs(o) do
+      if type(k) ~= "number" then
+        k = '"' .. k .. '"'
+      end
+      s = s .. "[" .. k .. "] = " .. dump(v) .. ","
+    end
+    return s .. "} "
+  else
+    return tostring(o)
+  end
+end
+
 -- leader settings.
 vim.g.mapleader = " "
 vim.g.localmapleader = " "
@@ -16,7 +31,7 @@ vim.opt.mouse = "a"
 -- search.
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
-vim.cmd "nnoremap // :nohlsearch<CR>"
+vim.cmd "nnoremap g/ :nohlsearch<CR>"
 
 vim.opt.inccommand = "nosplit"
 
@@ -64,7 +79,7 @@ require("packer").startup(function()
   -- Packer can manage itself
   use "wbthomason/packer.nvim"
   use "nvim-lua/popup.nvim"
-  use "nvim-lua/plenary.nvim"
+  use { "nvim-lua/plenary.nvim" }
   use {
     "nvim-treesitter/nvim-treesitter",
     run = ":TSUpdate",
@@ -130,8 +145,8 @@ require("packer").startup(function()
       vim.cmd [[let g:startify_change_to_vcs_root = 1]]
       vim.g["startify_session_dir"] = vim.fn.stdpath "data" .. "/sessions"
       vim.cmd [[let g:startify_lists = [
-      \ { 'type': 'sessions',  'header': ['   Sessions']       },
       \ { 'type': 'dir',       'header': ['   MRU '. getcwd()] },
+      \ { 'type': 'sessions',  'header': ['   Sessions']       },
       \ { 'type': 'files',     'header': ['   MRU']            },
       \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
       \ { 'type': 'commands',  'header': ['   Commands']       },
@@ -174,6 +189,7 @@ require("packer").startup(function()
     event = "VimEnter",
     config = function()
       vim.cmd [[nnoremap <c-k> <cmd>MatchupWhereAmI?<cr>]]
+      vim.cmd [[highlight MatchParen guibg=#404040]]
     end,
   }
 
@@ -283,8 +299,7 @@ require("packer").startup(function()
 
           local function map(mode, l, r, opts)
             opts = opts or {}
-            opts.buffer = bufnr
-            vim.keymap.set(mode, l, r, opts)
+            vim.api.nvim_buf_set_keymap(bufnr, mode, l, r, opts)
           end
 
           -- Navigation
@@ -292,24 +307,14 @@ require("packer").startup(function()
           map("n", "[c", "&diff ? '[c' : '<cmd>Gitsigns prev_hunk<CR>'", { expr = true })
 
           -- Actions
-          map({ "n", "v" }, "<leader>hs", gs.stage_hunk)
-          map({ "n", "v" }, "<leader>hr", gs.reset_hunk)
-          map("n", "<leader>hS", gs.stage_buffer)
-          map("n", "<leader>hu", gs.undo_stage_hunk)
-          map("n", "<leader>hR", gs.reset_buffer)
-          map("n", "<leader>hp", gs.preview_hunk)
-          map("n", "<leader>hb", function()
-            gs.blame_line { full = true }
-          end)
-          map("n", "<leader>tb", gs.toggle_current_line_blame)
-          map("n", "<leader>hd", gs.diffthis)
-          map("n", "<leader>hD", function()
-            gs.diffthis "~"
-          end)
-          map("n", "<leader>td", gs.toggle_deleted)
-
-          -- Text object
-          map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>")
+          map("n", "<leader>hs", "<cmd>lua require('gitsigns').stage_hunk()<CR>")
+          map("v", "<leader>hs", "<cmd>lua require('gitsigns').stage_hunk()<CR>")
+          map("n", "<leader>hr", "<cmd>lua require('gitsigns').reset_hunk()<CR>")
+          map("v", "<leader>hr", "<cmd>lua require('gitsigns').reset_hunk()<CR>")
+          map("n", "<leader>hS", "<cmd>lua require('gitsigns').stage_buffer()<CR>")
+          map("n", "<leader>hu", "<cmd>lua require('gitsigns').undo_stage_hunk()<CR>")
+          map("n", "<leader>hR", "<cmd>lua require('gitsigns').reset_buffer()<CR>")
+          map("n", "<leader>hp", "<cmd>lua require('gitsigns').preview_hunk()<CR>")
         end,
       }
     end,
@@ -335,6 +340,9 @@ require("packer").startup(function()
       vim.cmd [[nnoremap <silent> <Leader>dp :diffput<CR>]]
     end,
   }
+
+  -- tags
+  use "ludovicchabant/vim-gutentags"
 
   -- search.
   use "haya14busa/is.vim"
@@ -406,18 +414,49 @@ require("packer").startup(function()
   use {
     "jose-elias-alvarez/null-ls.nvim",
     config = function()
+      _G.nullformatting = function(bufnr)
+        bufnr = tonumber(bufnr) or vim.api.nvim_get_current_buf()
+
+        vim.lsp.buf_request(
+          bufnr,
+          "textDocument/formatting",
+          { textDocument = { uri = vim.uri_from_bufnr(bufnr) } },
+          function(err, res)
+            if err then
+              local err_msg = type(err) == "string" and err or err.message
+              -- you can modify the log message / level (or ignore it completely)
+              vim.notify("formatting: " .. err_msg, vim.log.levels.WARN)
+              return
+            end
+
+            -- don't apply results if buffer is unloaded or has been modified
+            if not vim.api.nvim_buf_is_loaded(bufnr) or vim.api.nvim_buf_get_option(bufnr, "modified") then
+              return
+            end
+
+            if res then
+              vim.lsp.util.apply_text_edits(res, bufnr)
+              vim.api.nvim_buf_call(bufnr, function()
+                vim.cmd "silent noautocmd update"
+              end)
+            end
+          end
+        )
+      end
+
       require("null-ls").setup {
         sources = {
           require("null-ls").builtins.formatting.stylua,
+          -- require("null-ls").builtins.formatting.prettierd,
           require("null-ls").builtins.formatting.eslint_d,
-          require("null-ls").builtins.formatting.prettier,
         },
         on_attach = function(client)
-          if client.resolved_capabilities.document_formatting then
+          if client.supports_method "textDocument/formatting" then
+            -- wrap in an augroup to prevent duplicate autocmds
             vim.cmd [[
             augroup LspFormatting
                 autocmd! * <buffer>
-                autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync(nil, 4000)
+                autocmd BufWritePost <buffer> lua nullformatting(vim.fn.expand("<abuf>"))
             augroup END
             ]]
           end
@@ -438,6 +477,7 @@ require("packer").startup(function()
       "hrsh7th/cmp-buffer",
       "hrsh7th/cmp-path",
       "hrsh7th/cmp-cmdline",
+      "quangnguyen30192/cmp-nvim-tags",
     },
     config = function()
       require "dotfiles.cmp"

@@ -28,10 +28,11 @@ cmp.setup {
     ["<Tab>"] = cmp.mapping.confirm { select = true },
   },
   sources = {
-    { name = "nvim_lsp" },
-    { name = "vsnip" },
+    { name = "nvim_lsp", priority = 101 },
+    { name = "vsnip", priority = 1000 },
     { name = "buffer" },
     { name = "path" },
+    { name = "tags" },
   },
   confirm_opts = {
     behavior = cmp.ConfirmBehavior.Replace,
