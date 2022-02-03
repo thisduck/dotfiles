@@ -108,9 +108,13 @@ require("packer").startup(function()
     requires = { "kyazdani42/nvim-web-devicons", opt = true },
     config = function()
       local gps = require "nvim-gps"
+      local theme = require "lualine.themes.onedark"
+      theme.inactive.a.fg = "#a1a1aa"
+      theme.inactive.b.fg = "#a1a1aa"
+      theme.inactive.c.fg = "#a1a1aa"
       require("lualine").setup {
         options = {
-          theme = "onedark",
+          theme = theme,
         },
         sections = {
           lualine_c = { "filename", "lsp_progress", { gps.get_location, cond = gps.is_available } },
