@@ -101,6 +101,12 @@ require("packer").startup(function()
       vim.cmd "colorscheme onedark"
     end,
   }
+  use {
+    "edkolev/tmuxline.vim",
+    config = function()
+      vim.cmd [[Tmuxline vim_statusline_3]]
+    end,
+  }
 
   use "arkav/lualine-lsp-progress"
   use {
@@ -108,9 +114,16 @@ require("packer").startup(function()
     requires = { "kyazdani42/nvim-web-devicons", opt = true },
     config = function()
       local gps = require "nvim-gps"
+      local theme = require "lualine.themes.onedark"
+      theme.inactive.a.fg = "#a1a1aa"
+      theme.inactive.b.fg = "#a1a1aa"
+      theme.inactive.c.fg = "#a1a1aa"
+      theme.inactive.a.bg = "#3f3f46"
+      theme.inactive.b.bg = "#3f3f46"
+      theme.inactive.c.bg = "#3f3f46"
       require("lualine").setup {
         options = {
-          theme = "onedark",
+          theme = theme,
         },
         sections = {
           lualine_c = { "filename", "lsp_progress", { gps.get_location, cond = gps.is_available } },
@@ -121,23 +134,6 @@ require("packer").startup(function()
   }
 
   -- project.
-  use {
-    "Shatur/neovim-session-manager",
-    config = function()
-      local Path = require "plenary.path"
-      require("session_manager").setup {
-        sessions_dir = Path:new(vim.fn.stdpath "data", "sessions"),
-        path_replacer = "__",
-        colon_replacer = "++",
-        autoload_mode = require("session_manager.config").AutoloadMode.Disabled,
-        autoload_last_session = false,
-        autosave_last_session = true,
-        autosave_ignore_not_normal = true,
-        autosave_ignore_filetypes = { "gitcommit" },
-        autosave_only_in_session = false,
-      }
-    end,
-  }
 
   use {
     "mhinz/vim-startify",
@@ -151,6 +147,16 @@ require("packer").startup(function()
       \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
       \ { 'type': 'commands',  'header': ['   Commands']       },
       \ ] ]]
+      vim.cmd [[ let g:startify_session_before_save = [ 'silent! tabdo NERDTreeClose' ] ]]
+      vim.cmd [[ let g:startify_session_persistence = 1 ]]
+      vim.cmd [[
+        function! GetUniqueSessionName()
+          let path = fnamemodify(getcwd(), ':~:t')
+          let path = empty(path) ? 'no-project' : path
+          return substitute(path, '/', '-', 'g')
+        endfunction
+        autocmd VimLeavePre * silent execute 'SSave! ' . GetUniqueSessionName()
+      ]]
     end,
   }
 
