@@ -23,7 +23,7 @@ local on_attach = function(client, bufnr)
   local map = vim.api.nvim_buf_set_keymap
   map(bufnr, "n", "<Leader>rn", "<cmd>Lspsaga rename<cr>", { silent = true, noremap = true })
   map(bufnr, "n", "<Leader>a", "<cmd>Lspsaga code_action<cr>", { silent = true, noremap = true })
-  map(bufnr, "x", "<Leader>a", "<cmd><c-u>Lspsaga range_code_action<cr>", { silent = true, noremap = true })
+  map(bufnr, "x", "<Leader>a", "<cmd>Lspsaga range_code_action<cr>", { silent = true, noremap = true })
   map(bufnr, "n", "L", "<cmd>Lspsaga hover_doc<cr>", { silent = true, noremap = true })
   map(bufnr, "n", "go", "<cmd>Lspsaga show_line_diagnostics<cr>", { silent = true, noremap = true })
   map(bufnr, "n", "]g", "<cmd>Lspsaga diagnostic_jump_next<cr>", { silent = true, noremap = true })
