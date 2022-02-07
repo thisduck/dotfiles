@@ -33,6 +33,8 @@ cmp.setup {
     { name = "buffer" },
     { name = "path" },
     { name = "tags" },
+    { name = "treesitter" },
+    { name = "rg" },
   },
   confirm_opts = {
     behavior = cmp.ConfirmBehavior.Replace,

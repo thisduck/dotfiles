@@ -103,9 +103,9 @@ require("packer").startup(function()
   }
   use {
     "edkolev/tmuxline.vim",
-    config = function()
-      vim.cmd [[Tmuxline vim_statusline_3]]
-    end,
+    -- config = function()
+    --   vim.cmd [[Tmuxline vim_statusline_3]]
+    -- end,
   }
 
   use "arkav/lualine-lsp-progress"
@@ -171,10 +171,13 @@ require("packer").startup(function()
   use {
     "phaazon/hop.nvim",
     config = function()
-      require("hop").setup {}
+      require("hop").setup {
+        extensions = { "dotfiles.hop-eow" },
+      }
 
       vim.cmd [[map ; <cmd>HopChar1<CR>]]
       vim.cmd [[map <Leader>w <cmd>HopWord<CR>]]
+      vim.cmd [[map <Leader>e <cmd>lua require('dotfiles.hop-eow').hint_around_cursor()<CR>]]
       vim.cmd [[map <Leader>j <cmd>HopLineStartAC<CR>]]
       vim.cmd [[map <Leader>k <cmd>HopLineStartBC<CR>]]
       vim.cmd [[highlight HopNextKey2 guifg=darkgrey guibg=#2d2d2d]]
@@ -277,8 +280,6 @@ require("packer").startup(function()
               keymaps = {
                 ["af"] = "@function.outer",
                 ["if"] = "@function.inner",
-                ["ac"] = "@class.outer",
-                ["ic"] = "@class.inner",
               },
             },
           },
@@ -388,6 +389,8 @@ require("packer").startup(function()
 
   -- language/framework support.
   use "sheerun/vim-polyglot"
+  -- use "tpope/vim-ruby"
+  use "tpope/vim-rails"
 
   -- focus.
   use {
@@ -469,11 +472,12 @@ require("packer").startup(function()
         )
       end
 
-      require("null-ls").setup {
+      local null_ls = require "null-ls"
+      null_ls.setup {
         sources = {
-          require("null-ls").builtins.formatting.stylua,
-          -- require("null-ls").builtins.formatting.prettierd,
-          require("null-ls").builtins.formatting.eslint_d,
+          null_ls.builtins.formatting.stylua,
+          -- null_ls.builtins.formatting.prettierd,
+          null_ls.builtins.formatting.eslint_d,
         },
         on_attach = function(client)
           if client.supports_method "textDocument/formatting" then
@@ -503,6 +507,8 @@ require("packer").startup(function()
       "hrsh7th/cmp-path",
       "hrsh7th/cmp-cmdline",
       "quangnguyen30192/cmp-nvim-tags",
+      "ray-x/cmp-treesitter",
+      "lukas-reineke/cmp-rg",
     },
     config = function()
       require "dotfiles.cmp"
