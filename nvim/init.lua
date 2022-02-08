@@ -103,9 +103,9 @@ require("packer").startup(function()
   }
   use {
     "edkolev/tmuxline.vim",
-    config = function()
-      vim.cmd [[Tmuxline vim_statusline_3]]
-    end,
+    -- config = function()
+    --   vim.cmd [[Tmuxline powerline]]
+    -- end,
   }
 
   use "arkav/lualine-lsp-progress"
@@ -178,6 +178,14 @@ require("packer").startup(function()
       vim.cmd [[map <Leader>j <cmd>HopLineStartAC<CR>]]
       vim.cmd [[map <Leader>k <cmd>HopLineStartBC<CR>]]
       vim.cmd [[highlight HopNextKey2 guifg=darkgrey guibg=#2d2d2d]]
+    end,
+  }
+
+  use {
+    "mfussenegger/nvim-ts-hint-textobject",
+    config = function()
+      vim.cmd [[nnoremap     <silent> m :<C-U>lua require('tsht').nodes()<CR>]]
+      vim.cmd [[vnoremap <silent> m :lua require('tsht').nodes()<CR>]]
     end,
   }
 
@@ -265,7 +273,6 @@ require("packer").startup(function()
     "beloglazov/vim-textobj-quotes",
     "coderifous/textobj-word-column.vim",
     "Julian/vim-textobj-variable-segment",
-    "haya14busa/vim-textobj-function-syntax",
     {
       "nvim-treesitter/nvim-treesitter-textobjects",
       config = function()
@@ -367,7 +374,12 @@ require("packer").startup(function()
   }
 
   -- tags
-  use "ludovicchabant/vim-gutentags"
+  use {
+    "ludovicchabant/vim-gutentags",
+    config = function()
+      vim.cmd [[let g:gutentags_file_list_command = 'rg --files']]
+    end,
+  }
 
   -- search.
   use "haya14busa/is.vim"
