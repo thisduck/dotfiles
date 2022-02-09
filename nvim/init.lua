@@ -96,12 +96,40 @@ require("packer").startup(function()
   use "nvim-treesitter/playground"
 
   -- visuals.
+  -- use {
+  --   "navarasu/onedark.nvim",
+  --   config = function()
+  --     vim.cmd "colorscheme onedark"
+  --   end,
+  -- }
+
   use {
-    "navarasu/onedark.nvim",
+    "EdenEast/nightfox.nvim",
     config = function()
-      vim.cmd "colorscheme onedark"
+      local nightfox = require "nightfox"
+
+      nightfox.setup {
+        fox = "nightfox",
+        colors = { comment = "#a1a1aa" },
+        inverse = {
+          match_paren = true,
+        },
+        hlgroups = {
+          String = { fg = "${yellow_br}" },
+          TSURI = { fg = "${yellow_br}" },
+          TSProperty = { fg = "${yellow_dm}" },
+          TSMethod = { fg = "${blue_br}" },
+          TSTag = { fg = "${magenta}" },
+          HopNextKey = { fg = "#a5f3fc", style = "bold" },
+          HopNextKey1 = { fg = "#f87171", style = "bold" },
+          HopNextKey2 = { fg = "#fca5a5", style = "bold" },
+        },
+      }
+
+      nightfox.load()
     end,
   }
+
   use {
     "edkolev/tmuxline.vim",
     -- config = function()
