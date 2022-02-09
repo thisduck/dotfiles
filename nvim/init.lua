@@ -93,6 +93,7 @@ require("packer").startup(function()
       }
     end,
   }
+  use "nvim-treesitter/playground"
 
   -- visuals.
   use {
@@ -173,6 +174,7 @@ require("packer").startup(function()
     config = function()
       require("hop").setup {
         extensions = { "dotfiles.hop-eow" },
+        keys = "asdghklqwer;'uiopzcvnmfj",
       }
 
       vim.cmd [[map ; <cmd>HopChar1<CR>]]
@@ -180,14 +182,14 @@ require("packer").startup(function()
       vim.cmd [[map <Leader>e <cmd>lua require('dotfiles.hop-eow').hint_around_cursor()<CR>]]
       vim.cmd [[map <Leader>j <cmd>HopLineStartAC<CR>]]
       vim.cmd [[map <Leader>k <cmd>HopLineStartBC<CR>]]
-      vim.cmd [[highlight HopNextKey2 guifg=darkgrey guibg=#2d2d2d]]
+      -- vim.cmd [[highlight HopNextKey2 guifg=darkgrey guibg=#2d2d2d]]
     end,
   }
 
   use {
     "mfussenegger/nvim-ts-hint-textobject",
     config = function()
-      vim.cmd [[nnoremap     <silent> m :<C-U>lua require('tsht').nodes()<CR>]]
+      vim.cmd [[nnoremap <silent> m :<C-U>lua require('tsht').nodes()<CR>]]
       vim.cmd [[vnoremap <silent> m :lua require('tsht').nodes()<CR>]]
     end,
   }
@@ -203,10 +205,11 @@ require("packer").startup(function()
   use "rstacruz/vim-closer"
   use {
     "andymass/vim-matchup",
-    event = "VimEnter",
     config = function()
       vim.cmd [[nnoremap <c-k> <cmd>MatchupWhereAmI?<cr>]]
-      vim.cmd [[highlight MatchParen guibg=#404040]]
+      vim.cmd [[highlight clear MatchParenCur]]
+      vim.cmd [[highlight link MatchParenCur CursorLine]]
+      -- vim.cmd [[highlight MatchParen guibg=#1c1c1c]]
     end,
   }
 
@@ -401,7 +404,7 @@ require("packer").startup(function()
 
   -- language/framework support.
   use "sheerun/vim-polyglot"
-  -- use "tpope/vim-ruby"
+  use "vim-ruby/vim-ruby"
   use "tpope/vim-rails"
 
   -- focus.
