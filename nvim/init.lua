@@ -120,6 +120,8 @@ require("packer").startup(function()
           TSProperty = { fg = "${yellow_dm}" },
           TSMethod = { fg = "${blue_br}" },
           TSTag = { fg = "${magenta}" },
+          TSKeywordReturn = { fg = "${red}" },
+          HopUnmatched = { fg = "#4b5563", style = "bold" },
           HopNextKey = { fg = "#a5f3fc", style = "bold" },
           HopNextKey1 = { fg = "#f87171", style = "bold" },
           HopNextKey2 = { fg = "#fca5a5", style = "bold" },
@@ -137,10 +139,9 @@ require("packer").startup(function()
     -- end,
   }
 
-  use "arkav/lualine-lsp-progress"
   use {
     "nvim-lualine/lualine.nvim",
-    requires = { "kyazdani42/nvim-web-devicons", opt = true },
+    requires = { { "kyazdani42/nvim-web-devicons", opt = true }, use "arkav/lualine-lsp-progress" },
     config = function()
       local gps = require "nvim-gps"
       local theme = require "lualine.themes.onedark"
@@ -201,16 +202,15 @@ require("packer").startup(function()
     "phaazon/hop.nvim",
     config = function()
       require("hop").setup {
-        extensions = { "dotfiles.hop-eow" },
+        extensions = { "dotfiles.hop-extensions" },
         keys = "asdghklqwer;'uiopzcvnmfj",
       }
 
-      vim.cmd [[map ; <cmd>HopChar1<CR>]]
+      vim.cmd [[map ; <cmd>lua require('dotfiles.hop-extensions').hint_char1()<CR>]]
       vim.cmd [[map <Leader>w <cmd>HopWord<CR>]]
-      vim.cmd [[map <Leader>e <cmd>lua require('dotfiles.hop-eow').hint_around_cursor()<CR>]]
+      vim.cmd [[map <Leader>e <cmd>lua require('dotfiles.hop-extensions').hint_end_of_word()<CR>]]
       vim.cmd [[map <Leader>j <cmd>HopLineStartAC<CR>]]
       vim.cmd [[map <Leader>k <cmd>HopLineStartBC<CR>]]
-      -- vim.cmd [[highlight HopNextKey2 guifg=darkgrey guibg=#2d2d2d]]
     end,
   }
 
@@ -421,7 +421,7 @@ require("packer").startup(function()
     config = function()
       vim.cmd [[nnoremap <Leader>/ :lua require('telescope.builtin').grep_string({ search = vim.fn.input("> ")})<CR>]]
       vim.cmd [[nnoremap <Leader><tab> <cmd>lua require('telescope.builtin').keymaps()<cr>]]
-      vim.cmd [[nnoremap <C-p> <cmd>lua require('telescope.builtin').find_files(require('telescope.themes').get_ivy({}))<cr>]]
+      vim.cmd [[nnoremap <C-p> <cmd>lua require('telescope.builtin').find_files()<cr>]]
       vim.cmd [[nnoremap <Leader>bs :lua require('telescope.builtin').buffers()<CR>]]
       vim.cmd [[nnoremap <Leader>he :lua require('telescope.builtin').help_tags()<CR>]]
       vim.cmd [[nnoremap <silent>K <cmd>lua require('telescope.builtin').grep_string()<cr>]]
