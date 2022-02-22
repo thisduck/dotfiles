@@ -104,33 +104,46 @@ require("packer").startup(function()
   -- }
 
   use {
-    "EdenEast/nightfox.nvim",
+    "rmehri01/onenord.nvim",
     config = function()
-      local nightfox = require "nightfox"
-
-      nightfox.setup {
-        fox = "nightfox",
-        colors = { comment = "#a1a1aa" },
-        inverse = {
-          match_paren = true,
-        },
-        hlgroups = {
-          String = { fg = "${yellow_br}" },
-          TSURI = { fg = "${yellow_br}" },
-          TSProperty = { fg = "${yellow_dm}" },
-          TSMethod = { fg = "${blue_br}" },
-          TSTag = { fg = "${magenta}" },
-          TSKeywordReturn = { fg = "${red}" },
-          HopUnmatched = { fg = "#4b5563", style = "bold" },
-          HopNextKey = { fg = "#a5f3fc", style = "bold" },
-          HopNextKey1 = { fg = "#f87171", style = "bold" },
-          HopNextKey2 = { fg = "#fca5a5", style = "bold" },
+      require("onenord").setup {
+        custom_highlights = {
+          MatchParen = { bg = "#52525b" },
         },
       }
-
-      nightfox.load()
+      vim.cmd [[highlight clear MatchParenCur]]
+      vim.cmd [[highlight link MatchParenCur CursorLine]]
     end,
   }
+
+  -- use {
+  --   "EdenEast/nightfox.nvim",
+  --   config = function()
+  --     local nightfox = require "nightfox"
+  --
+  --     nightfox.setup {
+  --       fox = "nightfox",
+  --       colors = { comment = "#a1a1aa" },
+  --       inverse = {
+  --         match_paren = true,
+  --       },
+  --       hlgroups = {
+  --         String = { fg = "${yellow_br}" },
+  --         TSURI = { fg = "${yellow_br}" },
+  --         TSProperty = { fg = "${yellow_dm}" },
+  --         TSMethod = { fg = "${blue_br}" },
+  --         TSTag = { fg = "${magenta}" },
+  --         TSKeywordReturn = { fg = "${red}" },
+  --         HopUnmatched = { fg = "#4b5563", style = "bold" },
+  --         HopNextKey = { fg = "#a5f3fc", style = "bold" },
+  --         HopNextKey1 = { fg = "#f87171", style = "bold" },
+  --         HopNextKey2 = { fg = "#fca5a5", style = "bold" },
+  --       },
+  --     }
+  --
+  --     nightfox.load()
+  --   end,
+  -- }
 
   use {
     "edkolev/tmuxline.vim",
@@ -144,7 +157,7 @@ require("packer").startup(function()
     requires = { { "kyazdani42/nvim-web-devicons", opt = true }, use "arkav/lualine-lsp-progress" },
     config = function()
       local gps = require "nvim-gps"
-      local theme = require "lualine.themes.onedark"
+      local theme = require "lualine.themes.onenord"
       theme.inactive.a.fg = "#a1a1aa"
       theme.inactive.b.fg = "#a1a1aa"
       theme.inactive.c.fg = "#a1a1aa"
@@ -229,7 +242,19 @@ require("packer").startup(function()
       vim.cmd [[nnoremap <Leader>u :MundoToggle<CR>]]
     end,
   }
-  use "tomtom/tcomment_vim"
+  -- use "tomtom/tcomment_vim"
+  use "tpope/vim-commentary"
+  use {
+    "JoosepAlviste/nvim-ts-context-commentstring",
+    config = function()
+      require("nvim-treesitter.configs").setup {
+        context_commentstring = {
+          enable = true,
+        },
+      }
+    end,
+  }
+
   use "rstacruz/vim-closer"
   use {
     "andymass/vim-matchup",
@@ -237,7 +262,7 @@ require("packer").startup(function()
       vim.cmd [[nnoremap <c-k> <cmd>MatchupWhereAmI?<cr>]]
       vim.cmd [[highlight clear MatchParenCur]]
       vim.cmd [[highlight link MatchParenCur CursorLine]]
-      -- vim.cmd [[highlight MatchParen guibg=#1c1c1c]]
+      vim.cmd [[highlight MatchParen guibg=#1c1c1c]]
     end,
   }
 
