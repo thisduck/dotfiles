@@ -75,7 +75,13 @@ vim.cmd [[packadd packer.nvim]]
 -- Shortcut for sourcing and running packer.
 vim.cmd [[nnoremap <Leader>i <cmd>source ~/.config/nvim/init.lua <bar> PackerSync<CR>]]
 
-require("packer").startup(function()
+local packer = require "packer"
+
+packer.init {
+  max_jobs = 50,
+}
+
+packer.startup(function()
   -- Packer can manage itself
   use "wbthomason/packer.nvim"
   use "nvim-lua/popup.nvim"
@@ -479,8 +485,7 @@ require("packer").startup(function()
   }
   use "tamago324/nlsp-settings.nvim"
   use {
-    "zeertzjq/symbols-outline.nvim",
-    branch = "patch-1",
+    "simrat39/symbols-outline.nvim",
     config = function()
       vim.g.symbols_outline = {
         width = 30,
