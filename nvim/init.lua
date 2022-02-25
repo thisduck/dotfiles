@@ -198,14 +198,14 @@ packer.startup(function()
       \ ] ]]
       vim.cmd [[ let g:startify_session_before_save = [ 'silent! tabdo NERDTreeClose' ] ]]
       vim.cmd [[ let g:startify_session_persistence = 1 ]]
-      vim.cmd [[
-        function! GetUniqueSessionName()
-          let path = fnamemodify(getcwd(), ':~:t')
-          let path = empty(path) ? 'no-project' : path
-          return substitute(path, '/', '-', 'g')
-        endfunction
-        autocmd VimLeavePre * silent execute 'SSave! ' . GetUniqueSessionName()
-      ]]
+      -- vim.cmd [[
+      --   function! GetUniqueSessionName()
+      --     let path = fnamemodify(getcwd(), ':~:t')
+      --     let path = empty(path) ? 'no-project' : path
+      --     return substitute(path, '/', '-', 'g')
+      --   endfunction
+      --   autocmd VimLeavePre * silent execute 'SSave! ' . GetUniqueSessionName()
+      -- ]]
     end,
   }
 
